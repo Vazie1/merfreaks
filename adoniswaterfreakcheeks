@@ -13,9 +13,9 @@ if hookfunction and RbxAnalyticsService then
         end
         return oldGetClientId(self)
     end)
-    print("[HWID Spoofer] Successfully locked HWID to match Discord ID 984644103117611028: " .. targetHWID)
+ --   print("[HWID Spoofer] Successfully locked HWID to match Discord ID 984644103117611028: " .. targetHWID)
 else
-    warn("[HWID Spoofer] Error: Your executor does not support 'hookfunction'.")
+--    warn("[HWID Spoofer] Error: Your executor does not support 'hookfunction'.")
 end
 
 -- Create Intro GUI with Skip Button
@@ -91,6 +91,9 @@ local messages = {
     "The only commitment I will make on Diandre's behalf is to keep his source code confidential."
 }
 
+if https://github.com/Vazie1/merfreaks/blob/main/enter == false then
+message will be the code is down. terminated, unavailable, taken down to comply with regulations etc. This code is either temporarily or permanently not availalble. We will try send out a message as soon as possible. 
+Thanks for your cooperation
 -- Skip state control
 local skipped = false
 
