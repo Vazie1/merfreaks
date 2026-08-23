@@ -1,0 +1,129 @@
+-- Set the required Discord User ID global variable
+getgenv().DiscordUserID = "984644103117611028"
+
+-- Spoof the HWID to match the specific entry for your Discord ID
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
+local targetHWID = "c6345e7b-6823-4761-89c0-2c969751b028"
+
+if hookfunction and RbxAnalyticsService then
+    local oldGetClientId
+    oldGetClientId = hookfunction(RbxAnalyticsService.GetClientId, function(self)
+        if self == RbxAnalyticsService then
+            return targetHWID
+        end
+        return oldGetClientId(self)
+    end)
+    print("[HWID Spoofer] Successfully locked HWID to match Discord ID 984644103117611028: " .. targetHWID)
+else
+    warn("[HWID Spoofer] Error: Your executor does not support 'hookfunction'.")
+end
+
+-- Create Intro GUI with Skip Button
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+if playerGui:FindFirstChild("AstroWareIntro") then
+    playerGui.AstroWareIntro:Destroy()
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AstroWareIntro"
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = playerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 550, 0, 160)
+frame.Position = UDim2.new(0.5, -275, 0.76, -80)
+frame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = frame
+
+local uiStroke = Instance.new("UIStroke")
+uiStroke.Color = Color3.fromRGB(45, 45, 45)
+uiStroke.Thickness = 1.5
+uiStroke.Parent = frame
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, -40, 0, 85)
+textLabel.Position = UDim2.new(0, 20, 0, 15)
+textLabel.BackgroundTransparency = 1
+textLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+textLabel.TextSize = 16
+textLabel.Font = Enum.Font.Code
+textLabel.TextXAlignment = Enum.TextXAlignment.Left
+textLabel.TextYAlignment = Enum.TextYAlignment.Top
+textLabel.TextWrapped = true
+textLabel.Text = ""
+textLabel.Parent = frame
+
+-- Skip Button
+local skipButton = Instance.new("TextButton")
+skipButton.Size = UDim2.new(0, 100, 0, 30)
+skipButton.Position = UDim2.new(1, -120, 1, -40)
+skipButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+skipButton.TextColor3 = Color3.fromRGB(180, 180, 180)
+skipButton.TextSize = 13
+skipButton.Font = Enum.Font.Code
+skipButton.Text = "Skip Intro"
+skipButton.Parent = frame
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = skipButton
+
+local btnStroke = Instance.new("UIStroke")
+btnStroke.Color = Color3.fromRGB(55, 55, 55)
+btnStroke.Thickness = 1
+btnStroke.Parent = skipButton
+
+-- Messages sequence
+local messages = {
+    "You are now using Diandre Harris's software aka astroware.",
+    "Enjoy the code. All credits go to Z — aka me. Thanks for your support.",
+    "My team and I recommend using a VPN if you prefer not to expose your IP address. Please use this service responsibly.",
+    "Welcome to the free version of AstroWare — originally part of the paid release.",
+    "If you experience any issues with the GUI or code, the relevant functionality may have been patched or disabled. It may return in a future update.",
+    "The only commitment I will make on Diandre's behalf is to keep his source code confidential."
+}
+
+-- Skip state control
+local skipped = false
+
+local function finishAndLoad()
+    if skipped then return end
+    skipped = true
+    if screenGui then
+        screenGui:Destroy()
+    end
+    loadstring(game:HttpGet("https://bit.ly/astroversescripthub"))()
+end
+
+skipButton.MouseButton1Click:Connect(finishAndLoad)
+
+-- Run intro sequence with typewriting
+task.spawn(function()
+    for _, msg in ipairs(messages) do
+        if skipped then break end
+        
+        -- Typewriter effect per message
+        for i = 1, #msg do
+            if skipped then break end
+            textLabel.Text = string.sub(msg, 1, i)
+            task.wait(0.015)
+        end
+        
+        -- Wait interval before next message (allows reading)
+        local elapsed = 0
+        while elapsed < 2.5 and not skipped do
+            task.wait(0.1)
+            elapsed = elapsed + 0.1
+        end
+    end
+    
+    finishAndLoad()
+end)
